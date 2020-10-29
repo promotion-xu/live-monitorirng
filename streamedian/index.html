@@ -43,12 +43,20 @@
 
   <body>
     <form action="">
-      WS HOST: <input type="text" value="ws://10.9.242.48:10080/rtsp-over-ws" size="50" id="rtsp-ws-source" />
+      WS HOST:
+      <input
+        type="text"
+        value="ws://10.9.242.48:10080/rtsp-over-ws"
+        size="50"
+        id="rtsp-ws-source"
+      />
 
       RTSP URL:
       <!-- <input type="text" value="rtsp://admin:admin1234@172.20.101.177:554" size=100 id="rtsp-source"> -->
       <select name="" id="rtsp-source">
-        <option value="rtsp://admin:Camerasenset1me@10.9.189.31:554">默认</option>
+        <option value="rtsp://admin:Camerasenset1me@10.9.189.31:554"
+          >默认</option
+        >
       </select>
       <input type="button" value="play" onClick="onPlay()" id="play" />
     </form>
@@ -77,8 +85,27 @@
     <script src="previewinfo_static.js"></script>
     <script>
       "use strict";
-      let PreviewInfoSEIID = new Uint8Array([0x7d, 0x4b, 0x4e, 0xb8, 0xcc, 0xab, 0x49, 0x0f, 0xa8, 0x18, 0x76, 0x92, 0x9f, 0xbf, 0xdd, 0xd8]).toString();
-      let PreviewInfo = protobuf.roots["default"].sensetime.viper.video_process.preview_info.PreviewInfo;
+      let PreviewInfoSEIID = new Uint8Array([
+        0x7d,
+        0x4b,
+        0x4e,
+        0xb8,
+        0xcc,
+        0xab,
+        0x49,
+        0x0f,
+        0xa8,
+        0x18,
+        0x76,
+        0x92,
+        0x9f,
+        0xbf,
+        0xdd,
+        0xd8
+      ]).toString();
+      let PreviewInfo =
+        protobuf.roots["default"].sensetime.viper.video_process.preview_info
+          .PreviewInfo;
       console.log("precvoew", PreviewInfoSEIID, protobuf.roots);
       /*
         let PreviewInfo = null;
@@ -99,7 +126,9 @@
       let n1 = document.getElementById("sei_payload");
       function reconnectHandler(e) {
         return new Promise((resolve, reject) => {
-          document.getElementById("error_msg").innerHTML = `连接错误${e.code}: ${e.msg}`;
+          document.getElementById(
+            "error_msg"
+          ).innerHTML = `连接错误${e.code}: ${e.msg}`;
           document.getElementById("operators").style.display = "unset";
           document.getElementById("reconnect").addEventListener("click", () => {
             document.getElementById("error_msg").innerHTML = "";
@@ -124,7 +153,7 @@
         if (!p)
           p = Streamedian.player("test_video", {
             socket: wsHost,
-            reconnectHandler: reconnectHandler,
+            reconnectHandler: reconnectHandler
           });
         p.setSource(source, "rtsp");
         return true;
@@ -155,7 +184,14 @@
 
               n.innerHTML = JSON.stringify(last);
               let plStr = new TextDecoder("utf-8").decode(last.payload);
-              n1.innerHTML = "player: " + player.currentTime + ", scaledPTS: " + last.scaledPTS + ", payload: '" + plStr + "'";
+              n1.innerHTML =
+                "player: " +
+                player.currentTime +
+                ", scaledPTS: " +
+                last.scaledPTS +
+                ", payload: '" +
+                plStr +
+                "'";
 
               let seiID = last.payload.subarray(0, 16).toString();
 
@@ -163,7 +199,12 @@
               if (videoWidth > 0) {
                 scale = 720.0 / videoWidth;
               }
-              if (scale > 0 && last.seenIDR && PreviewInfo && seiID == PreviewInfoSEIID) {
+              if (
+                scale > 0 &&
+                last.seenIDR &&
+                PreviewInfo &&
+                seiID == PreviewInfoSEIID
+              ) {
                 let pi = PreviewInfo.decode(last.payload.subarray(16));
                 // console.log("decoded = ", JSON.stringify(pi));
                 let con = document.getElementById("video_overlays");
@@ -177,7 +218,7 @@
                     div.innerHTML = e.objectType + ", " + e.trackId;
                     elem = {
                       div: div,
-                      ts: now,
+                      ts: now
                     };
                   }
 
@@ -237,17 +278,29 @@
           el.appendChild(option);
         }
       }
-      createOption(1, 125, "rtsp://admin:Camerasenset1me@10.9.189.$ip:554", "深圳湾 ");
-      createOption(170, 180, "rtsp://admin:admin1234@172.20.101.$ip:554", "海翔 ");
+      createOption(
+        1,
+        125,
+        "rtsp://admin:Camerasenset1me@10.9.189.$ip:554",
+        "深圳湾 "
+      );
+      createOption(
+        170,
+        180,
+        "rtsp://admin:admin1234@172.20.101.$ip:554",
+        "海翔 "
+      );
 
       document.getElementById("rtsp-source").onchange = onPlay;
       document.onkeydown = function(e) {
         if (e.key === "ArrowRight") {
-          el.selectedOptions[0].nextElementSibling && (el.selectedOptions[0].nextElementSibling.selected = true);
+          el.selectedOptions[0].nextElementSibling &&
+            (el.selectedOptions[0].nextElementSibling.selected = true);
           onPlay();
           e.preventDefault();
         } else if (e.key === "ArrowLeft") {
-          el.selectedOptions[0].previousElementSibling && (el.selectedOptions[0].previousElementSibling.selected = true);
+          el.selectedOptions[0].previousElementSibling &&
+            (el.selectedOptions[0].previousElementSibling.selected = true);
           onPlay();
           e.preventDefault();
         }

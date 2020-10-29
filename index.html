@@ -15,12 +15,11 @@
     <script>
       let playerClient = null;
       const player = document.getElementById("video");
-      playerClient = Streamedian.player(id, {
-        socket: "rtsp://",
+      playerClient = Streamedian.player(player, {
+        socket: "ws://",
         reconnectHandle: errorHandler
       });
-      player.video.muted = true;
-      player.video.play();
+      playerClient.setSource("rtsp://", "rtsp");
 
       function errorHandler() {}
     </script>
