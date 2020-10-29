@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script type="text/javascript" src="./lib/streamedian.js"></script>
+  </head>
+  <body>
+    <video id="video" src="" autoplay muted>
+      <source src="" type="application/x-rtsp" />
+    </video>
+
+    <script>
+      let playerClient = null;
+      const player = document.getElementById("video");
+      playerClient = Streamedian.player(id, {
+        socket: "rtsp://",
+        reconnectHandle: errorHandler
+      });
+      player.video.muted = true;
+      player.video.play();
+
+      function errorHandler() {}
+    </script>
+  </body>
+</html>
